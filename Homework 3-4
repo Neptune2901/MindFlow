@@ -1,6 +1,3 @@
-dge Problems Contests Status
-Time Limit Exceeded
-Time: 1596ms Memory: 10MB Lang: Python3 Author: neptune2901@gmail.com
 #Homework 3 小明排工作II dic.version
 n = int(input())
 work_dic = {}
