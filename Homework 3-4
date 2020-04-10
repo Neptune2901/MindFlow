@@ -1,0 +1,58 @@
+dge Problems Contests Status
+Time Limit Exceeded
+Time: 1596ms Memory: 10MB Lang: Python3 Author: neptune2901@gmail.com
+#Homework 3 小明排工作II dic.version
+n = int(input())
+work_dic = {}
+work_lst = []
+
+for i in range(n): #key = work_type, value = [work_cycle, work_time, deadline, count]
+    work = input().split()
+    work_dic[work[0]] = [int(work[1]), int(work[2]), 0, 0] 
+
+work_cycle = []
+work_type = []
+for key in work_dic:
+    work_cycle.append(work_dic[key][0])
+    work_type.append(key)
+
+work_cycle = tuple(work_cycle)
+work_type = tuple(work_type)
+
+timeline = [[]]
+i = 0
+while True: #establish due for each day
+    i += 1
+    timeline.append([])
+    for key in work_dic:
+        if i % work_dic[key][0] == 0:
+            timeline[i].append(key)
+    if timeline[-1] == [key for key in work_dic]:
+        break
+
+work_lst = ''
+for i in range(len(timeline) - 1):
+    available = []
+    for key in work_dic: #work_dic[key][n] n = 0(cycle), 1(time), 2(deadline), 3(count)
+        for j in range(i + 1, len(timeline)): #deadline for each work_type on day i
+            if key in timeline[j]:
+                work_dic[key][2] = j 
+                break
+        if key in timeline[i]: #work count = 0 if work_type due
+            work_dic[key][3] = 0
+        if work_dic[key][3] < work_dic[key][1]: #if count < work_time, work_type available
+            available.append(key)
+    work_now = sorted(work_dic.items(), key = lambda x: (x[1][2], x[1][0])) #sort by deadline, cycle
+    #print(i, 'work_now', work_now)
+    #print('compare', compare)
+    #print('available', available)
+    if available == []: #'X' if all work done
+        work_lst += 'X'
+    else:
+        for ele in work_now:
+            if ele[0] in available: #choose work by deadline then cycle
+                work_dic[ele[0]][3] += 1
+                work_lst += ele[0]
+                #print(work_lst)
+                break #if work chosen, break
+print(work_lst)
